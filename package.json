@@ -1,0 +1,20 @@
+{
+  "name": "zenova-shop-be",
+  "version": "1.0.0",
+  "description": "Zenova Online Fashion Shop",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "npm test"
+  },
+  "keywords": [
+    "zenova",
+    "fashion",
+    "shop"
+  ],
+  "author": "Sai Han",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
