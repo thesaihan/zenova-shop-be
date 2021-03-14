@@ -1,10 +1,14 @@
 import express from "express";
 import dotevn from "dotenv";
+import cors from "cors";
 import products from "./data/products.js";
 
 dotevn.config();
 
 const app = express();
+
+// Middleware
+app.use(cors());
 
 app.get("/", (req, res) => res.send("Backend API server is running..."));
 
