@@ -1,9 +1,12 @@
 import express from "express";
 import dotevn from "dotenv";
 import cors from "cors";
+import connectDB from "./config/db.js";
 import products from "./data/products.js";
 
 dotevn.config();
+
+connectDB();
 
 const app = express();
 
