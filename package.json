@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "start": "nodemon app",
-    "test": "npm test"
+    "test": "npm test",
+    "data:import": "node seeder.js",
+    "data:destroy": "node seeder.js -d"
   },
   "keywords": [
     "zenova",
