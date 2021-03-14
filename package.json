@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Zenova Online Fashion Shop",
   "main": "app.js",
+  "type": "module",
   "scripts": {
     "start": "nodemon app",
     "test": "npm test"
