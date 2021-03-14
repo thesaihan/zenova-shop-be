@@ -1,6 +1,7 @@
 import express from "express";
 import dotevn from "dotenv";
 import cors from "cors";
+import colors from "colors";
 import connectDB from "./config/db.js";
 import products from "./data/products.js";
 
@@ -29,5 +30,6 @@ app.listen(
   PORT,
   console.log(
     `Backend Express Server is running in ${process.env.NODE_ENV} mode on port ${PORT}`
+      .blue.bold
   )
 );
