@@ -4,7 +4,7 @@
   "description": "Zenova Online Fashion Shop",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "node app",
     "test": "npm test"
   },
   "keywords": [
