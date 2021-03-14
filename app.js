@@ -1,5 +1,8 @@
 const express = require("express");
+const dotevn = require("dotenv");
 const products = require("./data/products");
+
+dotevn.config();
 
 const app = express();
 
@@ -14,8 +17,10 @@ app.get("/api/product/:id", (req, res) => {
   res.json(product);
 });
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 app.listen(
   PORT,
-  console.log(`Backend Express Server is tarting on port ${PORT}`)
+  console.log(
+    `Backend Express Server is running in ${process.env.NODE_ENV} mode on port ${PORT}`
+  )
 );
