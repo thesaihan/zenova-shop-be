@@ -3,7 +3,7 @@ import dotevn from "dotenv";
 import cors from "cors";
 import colors from "colors";
 import connectDB from "./config/db.js";
-import products from "./data/products.js";
+import { productRoutes } from "./routes/index.js";
 
 dotevn.config();
 
@@ -14,16 +14,10 @@ const app = express();
 // Middleware
 app.use(cors());
 
+// Routes
+app.use("/api/products", productRoutes);
+
 app.get("/", (req, res) => res.send("Backend API server is running..."));
-
-app.get("/api/products", (req, res) => {
-  res.json(products);
-});
-
-app.get("/api/product/:id", (req, res) => {
-  const product = products.find((p) => p._id === req.params.id);
-  res.json(product);
-});
 
 const PORT = process.env.PORT || 5000;
 app.listen(
