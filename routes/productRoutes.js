@@ -28,10 +28,11 @@ productRoutes.get(
     const prodId = req.params.id;
     if (!prodId.match(/^[0-9a-fA-F]{24}$/)) {
       res.status(400).json({ message: "Invalid Product ID : " + prodId });
+    } else {
+      const product = await Product.findById(prodId);
+      product
+        ? res.json(product)
+        : res.status(404).json({ message: "Product Not Found : " + prodId });
     }
-    const product = await Product.findById(prodId);
-    product
-      ? res.json(product)
-      : res.status(404).json({ message: "Product Not Found : " + prodId });
   })
 );
