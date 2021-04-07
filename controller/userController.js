@@ -1,6 +1,7 @@
 import asyncHander from "express-async-handler";
 import { User } from "../model/index.js";
 import bcrypt from "bcryptjs";
+import generateToken from "../utils/generateToken.js";
 
 /**
  * @description Auth user login
@@ -18,7 +19,7 @@ export const processLogin = asyncHander(async (req, res) => {
         name: user.name,
         email: user.email,
         isAdmin: user.isAdmin,
-        access_token: null,
+        access_token: generateToken(user._id),
       });
     } else {
       res.status(401);
