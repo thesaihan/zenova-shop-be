@@ -30,3 +30,13 @@ export const processLogin = asyncHander(async (req, res) => {
     throw new Error("Please enter email and password");
   }
 });
+
+/**
+ * @description GET logged in user profile
+ * @route GET /api/users/profile
+ * @access Private
+ */
+export const getUserProfile = asyncHander(async (req, res) => {
+  const user = await User.findById(req.user._id).select("-password");
+  res.json(user);
+});
