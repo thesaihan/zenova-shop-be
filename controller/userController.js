@@ -2,6 +2,7 @@ import asyncHander from "express-async-handler";
 import { User } from "../model/index.js";
 import bcrypt from "bcryptjs";
 import generateToken from "../utils/generateToken.js";
+import { isEmail } from "../utils/functions.js";
 
 /**
  * @description Auth user login
@@ -12,7 +13,7 @@ export const processLogin = asyncHander(async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   if (email && password) {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email.toLowerCase() });
     if (user && (await bcrypt.compare(password, user.password))) {
       res.json({
         _id: user._id,
@@ -47,17 +48,23 @@ export const getUserProfile = asyncHander(async (req, res) => {
  * @access Public
  */
 export const registerNewUser = asyncHander(async (req, res) => {
-  const { name, email, password } = req.body;
-  if (!(name && email && password)) {
+  const { name, email, password, passwordReentered } = req.body;
+  if (!(name && email && password && passwordReentered)) {
     res.status(400);
     throw new Error("Missing user info");
+  } else if (!isEmail(email)) {
+    res.status(400);
+    throw new Error("Invalid email format");
+  } else if (password !== passwordReentered) {
+    res.status(400);
+    throw new Error("Passwords do not match");
   }
   const userExists = await User.findOne({ email }).select("-password");
 
   if (!userExists) {
     const createdUser = await User.create({
       name,
-      email,
+      email: email.toLowerCase(),
       password: bcrypt.hashSync(password),
     });
     if (createdUser) {
