@@ -8,6 +8,6 @@ import { protectRoute } from "../middleware/index.js";
 
 export const userRoutes = express.Router();
 
-userRoutes.post("/", registerNewUser);
+userRoutes.post("/register", registerNewUser);
 userRoutes.post("/login", processLogin);
 userRoutes.route("/profile").get(protectRoute, getUserProfile);
