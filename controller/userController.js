@@ -58,6 +58,9 @@ export const registerNewUser = asyncHander(async (req, res) => {
   } else if (password !== passwordReentered) {
     res.status(400);
     throw new Error("Passwords do not match");
+  } else if (password.length < 6 || password.length > 30) {
+    res.status(400);
+    throw new Error("Password must be between 6 - 30 characters");
   }
   const userExists = await User.findOne({ email }).select("-password");
 
