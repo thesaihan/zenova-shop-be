@@ -3,7 +3,7 @@ import dotevn from "dotenv";
 import cors from "cors";
 import colors from "colors";
 import connectDB from "./config/db.js";
-import { productRoutes, userRoutes } from "./routes/index.js";
+import { productRoutes, userRoutes, orderRoutes } from "./routes/index.js";
 import { notFoundHandler, errorHandler } from "./middleware/index.js";
 
 dotevn.config();
@@ -19,6 +19,7 @@ app.use(express.json());
 // Routes
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/orders", orderRoutes);
 
 app.get("/", (req, res) => res.send("Backend API server is running..."));
 
