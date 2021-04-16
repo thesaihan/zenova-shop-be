@@ -25,14 +25,14 @@ const orderSchema = mongoose.Schema(
           type: Number,
           required: true,
         },
-        products: {
+        pid: {
           type: mongoose.Schema.Types.ObjectId,
           required: true,
           ref: "Product",
         },
       },
     ],
-    shippingAddress: {
+    shippingInfo: {
       address: {
         type: String,
         required: true,
@@ -68,17 +68,22 @@ const orderSchema = mongoose.Schema(
         type: String,
       },
     },
-    taxPrice: {
+    subtotal: {
       type: Number,
       required: true,
       default: 0.0,
     },
-    shippingPrice: {
+    taxAmount: {
       type: Number,
       required: true,
       default: 0.0,
     },
-    totalPrice: {
+    shippingFee: {
+      type: Number,
+      required: true,
+      default: 0.0,
+    },
+    totalAmount: {
       type: Number,
       required: true,
       default: 0.0,
