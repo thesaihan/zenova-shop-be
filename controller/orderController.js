@@ -71,6 +71,7 @@ export const getOrderById = asyncHander(async (req, res) => {
  */
 export const markOrderAsPaid = asyncHander(async (req, res) => {
   const orderId = req.params.id;
+  const { id, status, update_time, payer } = req.body;
   if (!orderId) {
     res.status(400);
     throw new Error("Missing Order ID");
@@ -82,6 +83,12 @@ export const markOrderAsPaid = asyncHander(async (req, res) => {
     if (order) {
       order.isPaid = true;
       order.paidAt = Date.now();
+      order.paymentResult = {
+        id,
+        status,
+        update_time,
+        email_address: payer.email_address,
+      };
       const updatedOrder = order.save();
       res.json(updatedOrder);
     } else {
