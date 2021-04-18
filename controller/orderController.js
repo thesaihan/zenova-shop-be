@@ -59,7 +59,34 @@ export const getOrderById = asyncHander(async (req, res) => {
       res.json(order);
     } else {
       res.status(404);
-      throw new Error("Order not found : " + orderId);
+      throw new Error("Order Not Found : " + orderId);
+    }
+  }
+});
+
+/**
+ * @description Set order as paid according ID specified
+ * @route PUT /api/orders/:id/pay
+ * @access Private
+ */
+export const markOrderAsPaid = asyncHander(async (req, res) => {
+  const orderId = req.params.id;
+  if (!orderId) {
+    res.status(400);
+    throw new Error("Missing Order ID");
+  } else if (!orderId.match(/^[0-9a-fA-F]{24}$/)) {
+    res.status(400);
+    throw new Error("Invalid Order ID : " + orderId);
+  } else {
+    const order = await Order.findById(orderId);
+    if (order) {
+      order.isPaid = true;
+      order.paidAt = Date.now();
+      const updatedOrder = order.save();
+      res.json(updatedOrder);
+    } else {
+      res.status(404);
+      throw new Error("Order Not Found : " + orderId);
     }
   }
 });
