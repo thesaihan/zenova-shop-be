@@ -90,7 +90,7 @@ export const markOrderAsPaid = asyncHander(async (req, res) => {
     res.status(400);
     throw new Error("Invalid Order ID : " + orderId);
   } else {
-    const order = await Order.findById(orderId);
+    const order = await Order.findById(orderId).populate("user", "name email");
     if (order) {
       order.isPaid = true;
       order.paidAt = Date.now();
