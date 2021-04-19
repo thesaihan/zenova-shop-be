@@ -66,6 +66,16 @@ export const getOrderById = asyncHander(async (req, res) => {
 });
 
 /**
+ * @description Get orders for currently logged in user
+ * @route GET /api/orders
+ * @access Private
+ */
+export const getOrdersForCurrentUser = asyncHander(async (req, res) => {
+  const orders = await Order.find({ user: req.user._id });
+  res.json(orders);
+});
+
+/**
  * @description Set order as paid according ID specified
  * @route PUT /api/orders/:id/pay
  * @access Private
