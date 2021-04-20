@@ -1,4 +1,4 @@
-import asyncHander from "express-async-handler";
+import asyncHandler from "express-async-handler";
 import { User } from "../model/index.js";
 import bcrypt from "bcryptjs";
 import generateToken from "../utils/generateToken.js";
@@ -9,7 +9,7 @@ import { isEmail } from "../utils/functions.js";
  * @route POST /api/users/login
  * @access Public
  */
-export const processLogin = asyncHander(async (req, res) => {
+export const processLogin = asyncHandler(async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   if (email && password) {
@@ -37,9 +37,19 @@ export const processLogin = asyncHander(async (req, res) => {
  * @route GET /api/users/profile
  * @access Private
  */
-export const getUserProfile = asyncHander(async (req, res) => {
+export const getUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id).select("-password");
   res.json(user);
+});
+
+/**
+ * @description GET all users
+ * @route GET /api/users
+ * @access Private/Admin
+ */
+export const getAllUsers = asyncHandler(async (req, res) => {
+  const users = await User.find({}).select("-password");
+  res.json(users);
 });
 
 /**
@@ -47,7 +57,7 @@ export const getUserProfile = asyncHander(async (req, res) => {
  * @route POST /api/users
  * @access Public
  */
-export const registerNewUser = asyncHander(async (req, res) => {
+export const registerNewUser = asyncHandler(async (req, res) => {
   const { name, email, password, passwordReentered } = req.body;
   if (!(name && email && password && passwordReentered)) {
     res.status(400);
