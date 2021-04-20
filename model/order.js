@@ -87,6 +87,9 @@ const orderSchema = mongoose.Schema(
       type: Number,
       required: true,
       default: 0.0,
+      get: (v) => +v.toFixed(2),
+      set: (v) => +v.toFixed(2),
+      min: 0,
     },
     isPaid: {
       type: Boolean,

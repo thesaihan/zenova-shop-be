@@ -35,7 +35,7 @@ export const createNewOrder = asyncHander(async (req, res) => {
     subtotal,
     shippingFee,
     taxAmount,
-    totalAmount: +totalAmount.toFixed(2),
+    totalAmount,
   });
   res.json(createdOrder);
 });
@@ -56,7 +56,6 @@ export const getOrderById = asyncHander(async (req, res) => {
   } else {
     const order = await Order.findById(orderId).populate("user", "name email");
     if (order) {
-      order.totalAmount = +order.totalAmount.toFixed(2);
       res.json(order);
     } else {
       res.status(404);
@@ -101,7 +100,6 @@ export const markOrderAsPaid = asyncHander(async (req, res) => {
         email_address: payer.email_address,
       };
       const updatedOrder = await order.save();
-      updatedOrder.totalAmount = +updatedOrder.totalAmount.toFixed(2);
       res.json(updatedOrder);
     } else {
       res.status(404);
