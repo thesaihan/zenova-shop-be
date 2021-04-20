@@ -107,3 +107,30 @@ export const markOrderAsPaid = asyncHander(async (req, res) => {
     }
   }
 });
+
+/**
+ * @description Set order as delivered according ID specified
+ * @route PUT /api/orders/:id/deliver
+ * @access Private/Admin
+ */
+export const markOrderAsDelivered = asyncHander(async (req, res) => {
+  const orderId = req.params.id;
+  if (!orderId) {
+    res.status(400);
+    throw new Error("Missing Order ID");
+  } else if (!orderId.match(/^[0-9a-fA-F]{24}$/)) {
+    res.status(400);
+    throw new Error("Invalid Order ID : " + orderId);
+  } else {
+    const order = await Order.findById(orderId).populate("user", "name email");
+    if (order) {
+      order.isDelivered = true;
+      order.deliveredAt = Date.now();
+      const updatedOrder = await order.save();
+      res.json(updatedOrder);
+    } else {
+      res.status(404);
+      throw new Error("Order Not Found : " + orderId);
+    }
+  }
+});

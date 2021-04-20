@@ -36,3 +36,12 @@ export const protectRoute = asyncHandler(async (req, res, next) => {
     throw new Error("No access token specified");
   }
 });
+
+export const adminOnly = (req, res, next) => {
+  if (req.user && req.user.isAdmin) {
+    next();
+  } else {
+    res.status(401);
+    throw new Error("Only Zenova shop admin has access");
+  }
+};
