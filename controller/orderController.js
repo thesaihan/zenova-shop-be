@@ -124,6 +124,10 @@ export const markOrderAsDelivered = asyncHander(async (req, res) => {
   } else {
     const order = await Order.findById(orderId).populate("user", "name email");
     if (order) {
+      if (!order.isPaid) {
+        res.status(406);
+        throw new Error("Order is not paid : " + orderId);
+      }
       order.isDelivered = true;
       order.deliveredAt = Date.now();
       const updatedOrder = await order.save();
