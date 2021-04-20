@@ -1,4 +1,4 @@
-import asyncHander from "express-async-handler";
+import asyncHandler from "express-async-handler";
 import { Order } from "../model/index.js";
 
 /**
@@ -6,7 +6,7 @@ import { Order } from "../model/index.js";
  * @route POST /api/orders
  * @access Private
  */
-export const createNewOrder = asyncHander(async (req, res) => {
+export const createNewOrder = asyncHandler(async (req, res) => {
   const {
     orderItems,
     shippingInfo,
@@ -45,7 +45,7 @@ export const createNewOrder = asyncHander(async (req, res) => {
  * @route GET /api/orders/:id
  * @access Private
  */
-export const getOrderById = asyncHander(async (req, res) => {
+export const getOrderById = asyncHandler(async (req, res) => {
   const orderId = req.params.id;
   if (!orderId) {
     res.status(400);
@@ -69,7 +69,7 @@ export const getOrderById = asyncHander(async (req, res) => {
  * @route GET /api/orders
  * @access Private
  */
-export const getOrdersForCurrentUser = asyncHander(async (req, res) => {
+export const getOrdersForCurrentUser = asyncHandler(async (req, res) => {
   const orders = await Order.find({ user: req.user._id }).sort("-createdAt");
   res.json(orders);
 });
@@ -79,7 +79,7 @@ export const getOrdersForCurrentUser = asyncHander(async (req, res) => {
  * @route GET /api/orders/paid-but-not-delivered
  * @access Private/Admin
  */
-export const getPaidOrdersToDeliver = asyncHander(async (req, res) => {
+export const getPaidOrdersToDeliver = asyncHandler(async (req, res) => {
   const orders = await Order.find({ isPaid: true, isDelivered: false }).sort(
     "-createdAt"
   );
@@ -91,7 +91,7 @@ export const getPaidOrdersToDeliver = asyncHander(async (req, res) => {
  * @route GET /api/orders/delivered
  * @access Private/Admin
  */
-export const getDeliveredOrders = asyncHander(async (req, res) => {
+export const getDeliveredOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find({ isDelivered: true }).sort("-createdAt");
   res.json(orders);
 });
@@ -101,7 +101,7 @@ export const getDeliveredOrders = asyncHander(async (req, res) => {
  * @route GET /api/orders/unpaid
  * @access Private/Admin
  */
-export const getUnpaidOrders = asyncHander(async (req, res) => {
+export const getUnpaidOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find({ isPaid: false }).sort("-createdAt");
   res.json(orders);
 });
@@ -111,7 +111,7 @@ export const getUnpaidOrders = asyncHander(async (req, res) => {
  * @route PUT /api/orders/:id/pay
  * @access Private
  */
-export const markOrderAsPaid = asyncHander(async (req, res) => {
+export const markOrderAsPaid = asyncHandler(async (req, res) => {
   const orderId = req.params.id;
   const { id, status, update_time, payer } = req.body;
   if (!orderId) {
@@ -145,7 +145,7 @@ export const markOrderAsPaid = asyncHander(async (req, res) => {
  * @route PUT /api/orders/:id/deliver
  * @access Private/Admin
  */
-export const markOrderAsDelivered = asyncHander(async (req, res) => {
+export const markOrderAsDelivered = asyncHandler(async (req, res) => {
   const orderId = req.params.id;
   if (!orderId) {
     res.status(400);
