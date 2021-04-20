@@ -70,7 +70,39 @@ export const getOrderById = asyncHander(async (req, res) => {
  * @access Private
  */
 export const getOrdersForCurrentUser = asyncHander(async (req, res) => {
-  const orders = await Order.find({ user: req.user._id });
+  const orders = await Order.find({ user: req.user._id }).sort("-createdAt");
+  res.json(orders);
+});
+
+/**
+ * @description Get paid orders that admin needs to mark as delivered
+ * @route GET /api/orders/paid-but-not-delivered
+ * @access Private/Admin
+ */
+export const getPaidOrdersToDeliver = asyncHander(async (req, res) => {
+  const orders = await Order.find({ isPaid: true, isDelivered: false }).sort(
+    "-createdAt"
+  );
+  res.json(orders);
+});
+
+/**
+ * @description Get delivered orders
+ * @route GET /api/orders/delivered
+ * @access Private/Admin
+ */
+export const getDeliveredOrders = asyncHander(async (req, res) => {
+  const orders = await Order.find({ isDelivered: true }).sort("-createdAt");
+  res.json(orders);
+});
+
+/**
+ * @description Get unpaid orders
+ * @route GET /api/orders/unpaid
+ * @access Private/Admin
+ */
+export const getUnpaidOrders = asyncHander(async (req, res) => {
+  const orders = await Order.find({ isPaid: false }).sort("-createdAt");
   res.json(orders);
 });
 
