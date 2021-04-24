@@ -15,6 +15,7 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use("/product/images", express.static(process.env.IMG_UPLOAD_FOLDER));
 
 // Routes
 app.use("/api/products", productRoutes);
