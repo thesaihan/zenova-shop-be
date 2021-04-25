@@ -53,21 +53,12 @@ export const updateProduct = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Invalid Product ID : " + prodId);
   } else {
-    const product = await Product.findById(prodId);
-    if (product) {
-      Object.assign(product, {
-        ...req.body,
-        user: req.user._id,
-        _id: undefined,
-        __v: undefined,
-        createdAt: undefined,
-        updatedAt: undefined,
-      });
-      res.json(await product.save());
-    } else {
-      res.status(404);
-      throw new Error("Product Not Found : " + prodId);
-    }
+    const updatedProduct = await Product.findOneAndUpdate(
+      { _id: prodId },
+      req.body,
+      { new: true }
+    );
+    res.json(updatedProduct);
   }
 });
 
