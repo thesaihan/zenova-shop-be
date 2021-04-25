@@ -7,7 +7,7 @@ import { Product } from "../model/index.js";
  * @access Public
  */
 export const getProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({});
+  const products = await Product.find({}).sort("-updatedAt");
   res.json(products);
 });
 
