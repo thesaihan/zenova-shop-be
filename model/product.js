@@ -62,14 +62,16 @@ const productSchema = mongoose.Schema(
       type: Number,
       required: true,
       default: 0,
-      get: (v) => +v.toFixed(2),
-      set: (v) => +v.toFixed(2),
+      get: (v) => +(+v).toFixed(2),
+      set: (v) => +(+v).toFixed(2),
       min: 0,
     },
     countInStock: {
       type: Number,
       required: true,
       default: 0,
+      get: (v) => +v,
+      set: (v) => +v,
     },
   },
   {
