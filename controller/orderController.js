@@ -80,10 +80,24 @@ export const getOrdersForCurrentUser = asyncHandler(async (req, res) => {
  * @access Private/Admin
  */
 export const getPaidOrdersToDeliver = asyncHandler(async (req, res) => {
-  const orders = await Order.find({ isPaid: true, isDelivered: false }).sort(
-    "-createdAt"
-  );
-  res.json(orders);
+  const page = +req.query.page || 1;
+  const size = +req.query.size || 10;
+  if (page < 1) {
+    res.status(400);
+    throw new Error("Invalid page number : " + page);
+  }
+  if (size < 1) {
+    res.status(400);
+    throw new Error("Invalid page size : " + size);
+  }
+  const filter = { isPaid: true, isDelivered: false };
+  const orders = await Order.find(filter)
+    .limit(size)
+    .skip(page - 1)
+    .sort("-createdAt");
+  const totalElements = await Order.find(filter).countDocuments();
+  const totalPages = Math.ceil(totalElements / size);
+  res.json({ contents: orders, page, size, totalElements, totalPages });
 });
 
 /**
