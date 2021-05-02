@@ -128,12 +128,28 @@ export const getDeliveredOrders = asyncHandler(async (req, res) => {
 
 /**
  * @description Get unpaid orders
- * @route GET /api/orders/unpaid
+ * @route GET /api/orders/unpaid?page=1&size=10
  * @access Private/Admin
  */
 export const getUnpaidOrders = asyncHandler(async (req, res) => {
-  const orders = await Order.find({ isPaid: false }).sort("-createdAt");
-  res.json(orders);
+  const page = +req.query.page || 1;
+  const size = +req.query.size || 10;
+  if (page < 1) {
+    res.status(400);
+    throw new Error("Invalid page number : " + page);
+  }
+  if (size < 1) {
+    res.status(400);
+    throw new Error("Invalid page size : " + size);
+  }
+  const filter = { isPaid: false };
+  const orders = await Order.find(filter)
+    .limit(size)
+    .skip(page - 1)
+    .sort("-createdAt");
+  const totalElements = await Order.find(filter).countDocuments();
+  const totalPages = Math.ceil(totalElements / size);
+  res.json({ contents: orders, page, size, totalElements, totalPages });
 });
 
 /**
