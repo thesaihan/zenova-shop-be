@@ -94,7 +94,8 @@ export const getPaidOrdersToDeliver = asyncHandler(async (req, res) => {
   const orders = await Order.find(filter)
     .limit(size)
     .skip(page - 1)
-    .sort("-createdAt");
+    .sort("-createdAt")
+    .populate("user", "name email");
   const totalElements = await Order.find(filter).countDocuments();
   const totalPages = Math.ceil(totalElements / size);
   res.json({ contents: orders, page, size, totalElements, totalPages });
@@ -120,7 +121,8 @@ export const getDeliveredOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find(filter)
     .limit(size)
     .skip(page - 1)
-    .sort("-createdAt");
+    .sort("-createdAt")
+    .populate("user", "name email");
   const totalElements = await Order.find(filter).countDocuments();
   const totalPages = Math.ceil(totalElements / size);
   res.json({ contents: orders, page, size, totalElements, totalPages });
@@ -146,7 +148,8 @@ export const getUnpaidOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find(filter)
     .limit(size)
     .skip(page - 1)
-    .sort("-createdAt");
+    .sort("-createdAt")
+    .populate("user", "name email");
   const totalElements = await Order.find(filter).countDocuments();
   const totalPages = Math.ceil(totalElements / size);
   res.json({ contents: orders, page, size, totalElements, totalPages });
