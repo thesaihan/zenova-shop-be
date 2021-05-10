@@ -69,6 +69,47 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
 });
 
 /**
+ * @description change password by logged in user
+ * @route POST /api/users/change-password
+ * @access Private
+ */
+export const changePassword = asyncHandler(async (req, res) => {
+  const { currentPassword, password, passwordReentered } = req.body;
+  if (!currentPassword) {
+    res.status(400);
+    throw new Error("Current password is required");
+  } else if (!password) {
+    res.status(400);
+    throw new Error("New password is required");
+  } else if (password.length < 6 || password.length > 30) {
+    res.status(400);
+    throw new Error("New password must be between 6 - 30 characters");
+  } else if (password !== passwordReentered) {
+    res.status(400);
+    throw new Error("Passwords do not match");
+  }
+  const user = await User.findById(req.user._id);
+  if (user) {
+    if (await bcrypt.compare(currentPassword, user.password)) {
+      await User.findOneAndUpdate(
+        { _id: req.user._id },
+        { password: bcrypt.hashSync(password) }
+      );
+      res.json({
+        success: true,
+        message: "Your password has been changed successfully",
+      });
+    } else {
+      res.status(401);
+      throw new Error("Incorrect password");
+    }
+  } else {
+    res.status(404);
+    throw new Error("User not found : " + req.user._id);
+  }
+});
+
+/**
  * @description GET all users
  * @route GET /api/users
  * @access Private/Admin

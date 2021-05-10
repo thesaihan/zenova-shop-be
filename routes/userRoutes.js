@@ -5,6 +5,7 @@ import {
   registerNewUser,
   getAllUsers,
   updateUserProfile,
+  changePassword,
 } from "../controller/index.js";
 import { protectRoute, adminOnly } from "../middleware/index.js";
 
@@ -17,3 +18,4 @@ userRoutes
   .route("/profile")
   .get(protectRoute, getUserProfile)
   .put(protectRoute, updateUserProfile);
+userRoutes.route("/change-password").post(protectRoute, changePassword);
