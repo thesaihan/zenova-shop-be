@@ -43,6 +43,32 @@ export const getUserProfile = asyncHandler(async (req, res) => {
 });
 
 /**
+ * @description update logged in user profile
+ * @route PUT /api/users/profile
+ * @access Private
+ */
+export const updateUserProfile = asyncHandler(async (req, res) => {
+  const { name, email } = req.body;
+  if (!name || !name.trim()) {
+    res.status(400);
+    throw new Error("Name is required");
+  } else if (!email || !email.trim()) {
+    res.status(400);
+    throw new Error("Email is required");
+  } else if (!isEmail(email)) {
+    res.status(400);
+    throw new Error("Invalid email format");
+  }
+
+  const updatedUser = await User.findOneAndUpdate(
+    { _id: req.user._id },
+    { name, email },
+    { new: true }
+  ).populate("-password");
+  res.json(updatedUser);
+});
+
+/**
  * @description GET all users
  * @route GET /api/users
  * @access Private/Admin
