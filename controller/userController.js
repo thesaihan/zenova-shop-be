@@ -87,6 +87,9 @@ export const changePassword = asyncHandler(async (req, res) => {
   } else if (password !== passwordReentered) {
     res.status(400);
     throw new Error("Passwords do not match");
+  } else if (password === currentPassword) {
+    res.status(406);
+    throw new Error("New password cannot be the same as current password");
   }
   const user = await User.findById(req.user._id);
   if (user) {
