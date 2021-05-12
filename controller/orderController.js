@@ -93,7 +93,7 @@ export const getPaidOrdersToDeliver = asyncHandler(async (req, res) => {
   const filter = { isPaid: true, isDelivered: false };
   const orders = await Order.find(filter)
     .limit(size)
-    .skip(page - 1)
+    .skip((page - 1) * size)
     .sort("-createdAt")
     .populate("user", "name email");
   const totalElements = await Order.find(filter).countDocuments();
@@ -120,7 +120,7 @@ export const getDeliveredOrders = asyncHandler(async (req, res) => {
   const filter = { isDelivered: true };
   const orders = await Order.find(filter)
     .limit(size)
-    .skip(page - 1)
+    .skip((page - 1) * size)
     .sort("-createdAt")
     .populate("user", "name email");
   const totalElements = await Order.find(filter).countDocuments();
@@ -147,7 +147,7 @@ export const getUnpaidOrders = asyncHandler(async (req, res) => {
   const filter = { isPaid: false };
   const orders = await Order.find(filter)
     .limit(size)
-    .skip(page - 1)
+    .skip((page - 1) * size)
     .sort("-createdAt")
     .populate("user", "name email");
   const totalElements = await Order.find(filter).countDocuments();
