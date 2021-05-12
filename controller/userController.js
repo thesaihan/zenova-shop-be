@@ -113,6 +113,46 @@ export const changePassword = asyncHandler(async (req, res) => {
 });
 
 /**
+ * @description reset password by admin
+ * @route POST /api/users/reset-password
+ * @access Private/Admin
+ */
+export const resetPassword = asyncHandler(async (req, res) => {
+  const { email, password, passwordReentered } = req.body;
+  if (!email) {
+    res.status(400);
+    throw new Error("Email is required");
+  } else if (!isEmail(email)) {
+    res.status(400);
+    throw new Error("Invalid email format");
+  } else if (!password) {
+    res.status(400);
+    throw new Error("New password is required");
+  } else if (password.length < 6 || password.length > 30) {
+    res.status(400);
+    throw new Error("New password must be between 6 - 30 characters");
+  } else if (password !== passwordReentered) {
+    res.status(400);
+    throw new Error("Passwords do not match");
+  }
+  const user = await User.findOne({ email });
+  if (user && user._id) {
+    await User.findOneAndUpdate(
+      { _id: user._id },
+      { password: bcrypt.hashSync(password) }
+    );
+    res.status(200);
+    res.json({
+      success: true,
+      message: `Account password of ${user.name} (${user.email}) has been reset successfully`,
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found : " + email);
+  }
+});
+
+/**
  * @description GET all users
  * @route GET /api/users
  * @access Private/Admin
